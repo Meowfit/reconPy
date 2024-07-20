@@ -29,17 +29,18 @@ ReconPy streamlines these critical financial processes, enhancing accuracy and e
 ## The Parameters
 
 **left_df**:  _DataFrame_  
-: The primary DataFrame for comparison.
+The primary DataFrame for comparison.
 
 **right_df**:  _DataFrame_  
-: The secondary DataFrame for comparison.
+The secondary DataFrame for comparison.
 
 **left_exact_match_cols**:  _list of string_  
-: Columns from left_df used for exact matching. These columns join left_df and right_df, requiring identical values.
+Columns from left_df used for exact matching. These columns join left_df and right_df, requiring identical values.
 
 **right_exact_match_cols**:  _list of string_  
-: Columns from right_df used for exact matching. These columns join left_df and right_df, requiring identical values.
+Columns from right_df used for exact matching. These columns join left_df and right_df, requiring identical values.
 
+> [!NOTE]
 > The order of left_exact_match_cols and right_exact_match_cols is crucial. They link corresponding columns when header names differ between left_df and right_df:
 > 
 > Correct example:  
@@ -52,11 +53,12 @@ ReconPy streamlines these critical financial processes, enhancing accuracy and e
 > right_exact_match_cols = ['Bloomberg code', 'SD', 'TD']
 
 **left_compare_cols**:  _list of string_  
-: Columns from left_df used to calculate matching scores and determine if record pairs are within matching tolerance. Supports float, integer, date, datetime, and string data types. String comparisons will have blank diff columns.
+Columns from left_df used to calculate matching scores and determine if record pairs are within matching tolerance. Supports float, integer, date, datetime, and string data types. String comparisons will have blank diff columns.
 
 **right_compare_cols**:  _list of string_  
-: Columns from right_df used to calculate matching scores and determine if record pairs are within matching tolerance. Supports float, integer, date, datetime, and string data types. String comparisons will have blank diff columns.
+Columns from right_df used to calculate matching scores and determine if record pairs are within matching tolerance. Supports float, integer, date, datetime, and string data types. String comparisons will have blank diff columns.
 
+> [!NOTE]
 > The order of left_compare_cols and right_compare_cols is crucial. They link corresponding columns when header names differ between left_df and right_df:  
 > 
 > Example:  
@@ -64,36 +66,37 @@ ReconPy streamlines these critical financial processes, enhancing accuracy and e
 > right_compare_cols = ['Qty', 'Gross', 'Net']
 
 **show_left_cols**:  _list of string, default =_  `[]`  
-: Left_df columns to display in the output. Leave empty to omit all left_df headers.
+Left_df columns to display in the output. Leave empty to omit all left_df headers.
 
 **show_right_cols**:  _list of string, default =_  `[]`  
-: Right_df columns to display in the output. Leave empty to omit all right_df headers.
+Right_df columns to display in the output. Leave empty to omit all right_df headers.
 
 **weight**:  _list of string, default =_  `[1/len(left_compare_cols)] * len(left_compare_cols)`  
-: Weights applied when calculating matching scores. Must be positive numbers summing to 1. Length should match left_compare_cols. Default applies equal weights.
+Weights applied when calculating matching scores. Must be positive numbers summing to 1. Length should match left_compare_cols. Default applies equal weights.
 
 > Example: For left_compare_cols = ['Quantity', 'Gross amount', 'Settlement amount'], weight = [0.7, 0.2, 0.1] means Quantity's score is multiplied by 0.7, Gross amount by 0.2, etc.
 
 **tolerance_percentage**:  _list of string, default =_  `[0] * len(left_compare_cols)`  
-: Defines acceptable percentage difference for each compared column. Values must be between 0-100. Length should match left_compare_cols. Default is zero tolerance.
+Defines acceptable percentage difference for each compared column. Values must be between 0-100. Length should match left_compare_cols. Default is zero tolerance.
 
-: For date/datetime objects, 1% tolerance equals 3.6525 days. See  _Matching score calculation_  >  _Date/ datetime comparison_  for details.
+For date/datetime objects, 1% tolerance equals 3.6525 days. See  _Matching score calculation_  >  _Date/ datetime comparison_  for details.
 
 > Example: tolerance_percentage = [7, 8, 9.15] means pairs won't match if the percentage difference exceeds 7%, 8%, and 9.15% for the first, second, and third compared columns respectively.
 
+> [!NOTE]
 > The lengths of left_compare_cols, right_compare_cols, weight, and tolerance_percentage must be identical.
 
 **suffix**:  _list of string, default =_  `['_left', '_right']`  
-: Suffixes appended to left_compare_cols and right_compare_cols. Must be a list of two strings.
+Suffixes appended to left_compare_cols and right_compare_cols. Must be a list of two strings.
 
 **show_matching_status**:  _bool, default =_  `True`  
-: If True, displays matching status in *matching_status* in the output dataframe. Possible statuses:
+If True, displays matching status in *matching_status* in the output dataframe. Possible statuses:
 	* Matched: Perfect match (zero tolerance)
 	* Matched with tolerance: Matched within specified tolerance_percentage
 	* Unmatched: No possible match found
 
 **show_matching_score**:  _bool, default =_  `False`  
-: If True, displays matching score of the matched record in *matching_score* in the output dataframe. 
+If True, displays matching score of the matched record in *matching_score* in the output dataframe. 
 
 
 ## Installing reconPy
