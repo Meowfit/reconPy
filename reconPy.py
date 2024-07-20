@@ -11,17 +11,17 @@ def recon(left_df:pd.DataFrame, right_df:pd.DataFrame,
             suffix:list=['_left', '_right'],  
             show_matching_status=True, 
             show_matching_score=False) -> pd.DataFrame:
-        
+            
     """
     reconPy: Data Reconciliation Engine
 
     A tool for comparing records across two dataframes.
 
     Usage:
-        reconPy.recon(left_df, right_df, left_exact_match_cols, right_exact_match_cols, 
-            left_compare_cols, right_compare_cols, show_left_cols, show_right_cols, 
-            weight, tolerance_percentage, suffix,
-            show_matching_status, show_matching_score)
+        output = recon(left_df, right_df, left_exact_match_cols, right_exact_match_cols, 
+                    left_compare_cols, right_compare_cols, show_left_cols, show_right_cols, 
+                    weight, tolerance_percentage, suffix,
+                    show_matching_status, show_matching_score)
 
     Parameters:
         left_df, right_df (DataFrame): Primary and secondary DataFrames for comparison.

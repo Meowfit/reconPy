@@ -4,11 +4,15 @@ build-backend = "hatchling.build"
 
 [project]
 name = "reconPy"
-version = "1.0.1"
+version = "1.0.2"
 authors = [
   { name="KT", email="" },
 ]
-
+dependencies = [
+    "pandas",
+    "numpy",
+    "fuzzywuzzy",
+]
 description = "reconPy is a powerful yet user-friendly data reconciliation engine dessigned to compare records across two dataframes. It's particularly well-suited for financial sector applications, including: asset management firms, banks, brokers-dealers and hedge funds."
 readme = "README.md"
 requires-python = ">=3.8"

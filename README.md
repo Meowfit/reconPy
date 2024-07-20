@@ -108,7 +108,7 @@ If True, displays matching score of the matched record in *matching_score* in th
 
 ## Usage
 ```python
->>> from reconPy import reconPy
+>>> import reconPy
 ```
 
 
@@ -144,7 +144,7 @@ df2 - Internal OMS trade report:
 ```python
 >>> df1 = pd.read_excel('JPM_Trade_Confo_20241010.xlsx')
 >>> df2 = pd.read_excel('OMS_20241010.xlsx')
->>> output = reconPy.recon(left_df=df1, 
+>>> output = recon(left_df=df1, 
 			right_df=df2, 
 			show_left_cols=['Trade date','Client direction','BBG Code','JPM ID'], 
 			show_right_cols=['Internal reference'], 
@@ -206,7 +206,7 @@ df2 - Brokerage_Expenses_2024Q1.xlsx:
 ```python
 >>> df1 = pd.read_excel('Monthly_Commission_Paid_2024Q1.xlsx')
 >>> df2 = pd.read_excel('Brokerage_Expenses_2024Q1.xlsx')
->>> output_2 = reconPy.recon(left_df=df1,
+>>> output_2 = recon(left_df=df1,
 			right_df=df2,
 			show_left_cols=[],
 			show_right_cols=['Period'],
