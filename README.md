@@ -275,17 +275,6 @@ $$
 
 ## Performance
 
-| Number of records | Run time (seconds) |
-| ----------------------------- | ------------------ |
-| 100                           | 0.0159             |
-| 1,000                         | 0.0931             |
-| 5,000                         | 0.4484             |
-| 50,000                        | 4.4604             |
-| 100,000                       | 9.0372             |
-| 200,000                       | 17.641             |
-| 500,000                       | 45.418             |
-
-
 ```mermaid
 xychart-beta
 %%{init: { "themeVariables": {"xyChart": {"plotColorPalette": "#0000FF"} }}}%%
@@ -295,6 +284,20 @@ y-axis "Runtime (seconds)" 0 --> 50
 line [0.0159,0.0931,0.4484,4.4604,9.0372,17.6410,45.4180]
 ```
 
+<details>
+	<summary>Show numbers in table</summary>
+		  
+		| Number of records | Run time (seconds) |
+		| ----------------------------- | ------------------ |
+		| 100                           | 0.0159             |
+		| 1,000                         | 0.0931             |
+		| 5,000                         | 0.4484             |
+		| 50,000                        | 4.4604             |
+		| 100,000                       | 9.0372             |
+		| 200,000                       | 17.641             |
+		| 500,000                       | 45.418             |
+
+</details>
 
 The dataset size is determined by the number of rows in the left dataframe. The reported execution time is calculated as the mean duration across 5 separate runs. The specific test parameters are as follows:
 
