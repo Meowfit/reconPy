@@ -142,16 +142,16 @@ df2 - Internal OMS trade report:
 >>> df1 = pd.read_excel('JPM_Trade_Confo_20241010.xlsx')
 >>> df2 = pd.read_excel('OMS_20241010.xlsx')
 >>> output = recon(left_df=df1, 
-				right_df=df2, 
-				show_left_cols=['Trade date','Client direction','BBG Code','JPM ID'], 
-				show_right_cols=['Internal reference'], 
-				left_exact_match_cols=['Trade date','Client direction','BBG Code','Currency'], 
-				right_exact_match_cols=['TD','SD','B/S','Stock code','Ccy'], 
-				left_compare_cols=['Gross Price','Executed quantity','Commission','Market charges','Settlement amount'], 
-				right_compare_cols=['Avg price','Qty','Comm','Total charges','Net'], 
-				weight=[0.1,0.5,0.1,0.1,0.2],
-				tolerance_percentage=[1,1,20,20,1],
-				suffix=['_JPM','_OMS'])
+			right_df=df2, 
+			show_left_cols=['Trade date','Client direction','BBG Code','JPM ID'], 
+			show_right_cols=['Internal reference'], 
+			left_exact_match_cols=['Trade date','Client direction','BBG Code','Currency'], 
+			right_exact_match_cols=['TD','SD','B/S','Stock code','Ccy'], 
+			left_compare_cols=['Gross Price','Executed quantity','Commission','Market charges','Settlement amount'], 
+			right_compare_cols=['Avg price','Qty','Comm','Total charges','Net'], 
+			weight=[0.1,0.5,0.1,0.1,0.2],
+			tolerance_percentage=[1,1,20,20,1],
+			suffix=['_JPM','_OMS'])
 >>> print(output)
 ```
 Output: 
@@ -204,14 +204,14 @@ df2 - Brokerage_Expenses_2024Q1.xlsx:
 >>> df1 = pd.read_excel('Monthly_Commission_Paid_2024Q1.xlsx')
 >>> df2 = pd.read_excel('Brokerage_Expenses_2024Q1.xlsx')
 >>> output_2 = recon(left_df=df1,
-				right_df=df2,
-				show_left_cols=[],
-				show_right_cols=['Period'],
-				left_exact_match_cols=['Month'],
-				right_exact_match_cols=['Period'],
-				left_compare_cols=['Broker entity name','USD brokerage expenses'],
-				right_compare_cols=['Broker long name','Total commission paid (USD)'],
-				tolerance_percentage=[50,5])
+			right_df=df2,
+			show_left_cols=[],
+			show_right_cols=['Period'],
+			left_exact_match_cols=['Month'],
+			right_exact_match_cols=['Period'],
+			left_compare_cols=['Broker entity name','USD brokerage expenses'],
+			right_compare_cols=['Broker long name','Total commission paid (USD)'],
+			tolerance_percentage=[50,5])
 >>> print(output_2)
 ```
 
@@ -243,8 +243,9 @@ $$
 The matching score is measured using the square of the relative change. To avoid #div/0 error, 0.00000001 is added to the divisor.
 
 $$
-\%\ of\ tolerance_{n} \ge \frac{\left| number_{n}^{left} - number_{n}^{right} \right|}{number_{n}^{right}+  0.00000001} \times 100
+Tolerance_{n} \ge \frac{\left| number_{n}^{left} - number_{n}^{right} \right|}{number_{n}^{right}+  0.00000001} \times 100
 $$
+
 $$
 Matching\ score_{n}=(\frac{number_{n}^{left} - number_{n}^{right}}{number_{n}^{right} +  0.00000001})^{2}
 $$
@@ -256,8 +257,9 @@ The date score is measured as the difference between two dates relative to the n
 When the tolerance is 1%, the tolerance is 3.6525 days.
 
 $$
-\%\ of\ tolerance_{n} \ge \frac{\left|date_{n}^{left} - date_{n}^{right}\right|}{365.25} \times 100
+Tolerance_{n} \ge \frac{\left|date_{n}^{left} - date_{n}^{right}\right|}{365.25} \times 100
 $$
+
 $$
 Matching\ score_{n}=(\frac{ date_{n}^{left} - date_{n}^{right}}{365.25})^{2}
 $$
@@ -267,10 +269,11 @@ $$
 The string comparison is measured using the ratio function from [fuzzywuzzy library](https://pypi.org/project/fuzzywuzzy/). 
 
 $$
-\%\ of\ tolerance_{n} \ge 100 - \mathrm{fuzz.ratio}({ string_{n}^{left}, string_{n}^{right}})
+Tolerance_{n} \ge 100 - \mathrm{fuzz.ratio}({ string_{n}^{left}, string_{n}^{right}})
 $$
+
 $$
-Matching\ score_{n}=(100 - \mathrm{fuzz.ratio}({ string_{n}^{left}, string_{n}^{right}}))^{2}
+Matchzng\ score_{n}=(100 - \mathrm{fuzz.ratio}({ string_{n}^{left}, string_{n}^{right}}))^{2}
 $$
 
 ## Performance
