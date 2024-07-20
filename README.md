@@ -24,7 +24,7 @@ ReconPy streamlines these critical financial processes, enhancing accuracy and e
 
 ## The Function
 
-> output = recon(**left_df**, **right_df**,  **left_exact_match_cols**, **right_exact_match_cols**, **left_compare_cols**, **right_compare_cols**, **show_left_cols**=[], **show_right_cols**=[], **weight**=None, **tolerance_percentage**=None, **suffix**=['_left', '_right'], **show_matching_status**=True, **show_matching_score**=False)
+> output = reconPy.recon(**left_df**, **right_df**,  **left_exact_match_cols**, **right_exact_match_cols**, **left_compare_cols**, **right_compare_cols**, **show_left_cols**=[], **show_right_cols**=[], **weight**=None, **tolerance_percentage**=None, **suffix**=['_left', '_right'], **show_matching_status**=True, **show_matching_score**=False)
 
 ## The Parameters
 
@@ -144,7 +144,7 @@ df2 - Internal OMS trade report:
 ```python
 >>> df1 = pd.read_excel('JPM_Trade_Confo_20241010.xlsx')
 >>> df2 = pd.read_excel('OMS_20241010.xlsx')
->>> output = recon(left_df=df1, 
+>>> output = reconPy.recon(left_df=df1, 
 			right_df=df2, 
 			show_left_cols=['Trade date','Client direction','BBG Code','JPM ID'], 
 			show_right_cols=['Internal reference'], 
@@ -206,7 +206,7 @@ df2 - Brokerage_Expenses_2024Q1.xlsx:
 ```python
 >>> df1 = pd.read_excel('Monthly_Commission_Paid_2024Q1.xlsx')
 >>> df2 = pd.read_excel('Brokerage_Expenses_2024Q1.xlsx')
->>> output_2 = recon(left_df=df1,
+>>> output_2 = reconPy.recon(left_df=df1,
 			right_df=df2,
 			show_left_cols=[],
 			show_right_cols=['Period'],
