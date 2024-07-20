@@ -108,7 +108,7 @@ If True, displays matching score of the matched record in *matching_score* in th
 
 ## Usage
 ```python
->>> import reconPy
+>>> from reconPy import reconPy
 ```
 
 
