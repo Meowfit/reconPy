@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
 from fuzzywuzzy import fuzz
-import timeit
-import os 
 
 def recon(left_df:pd.DataFrame, right_df:pd.DataFrame, 
             left_exact_match_cols:list, right_exact_match_cols:list, 
@@ -13,8 +11,33 @@ def recon(left_df:pd.DataFrame, right_df:pd.DataFrame,
             suffix:list=['_left', '_right'],  
             show_matching_status=True, 
             show_matching_score=False) -> pd.DataFrame:
-    
-# write help doc
+        
+    """
+    ReconPy: Data Reconciliation Engine
+
+    A tool for comparing records across two dataframes.
+
+    Usage:
+        recon(left_df, right_df, left_exact_match_cols, right_exact_match_cols, 
+            left_compare_cols, right_compare_cols, show_left_cols, show_right_cols, 
+            weight, tolerance_percentage, suffix,
+            show_matching_status, show_matching_score)
+
+    Parameters:
+        left_df, right_df (DataFrame): Primary and secondary DataFrames for comparison.
+        left_exact_match_cols, right_exact_match_cols (list): Columns for exact matching.
+        left_compare_cols, right_compare_cols (list): Columns for score-based matching.
+
+    Optional Parameters:
+        show_left_cols, show_right_cols (list): Columns to display in output.
+        weight (list): Weights for score calculation.
+        tolerance_percentage (list): Acceptable percentage differences.
+        suffix (list): Suffixes for output columns.
+        show_matching_status (bool): Display matching status.
+        show_matching_score (bool): Display matching score.
+
+    For detailed documentation, refer to the full project description.
+    """
 
     # If weighting is not provided, use equal weights
     if weight is None:
@@ -162,42 +185,3 @@ def recon(left_df:pd.DataFrame, right_df:pd.DataFrame,
         output_columns.append('matching_status')
 
     return result_df[output_columns]
-
-pd.set_option('display.max_columns', 100)
-pd.set_option('display.width', 10000)
-
-os.chdir(r'N:\Python 101\VS Code\reconPy')
-
-df1 = pd.read_excel('Confo1.xlsx')
-df2 = pd.read_excel('Confo2.xlsx')
-
-# df1 = pd.read_excel('Confo5.xlsx')
-# df2 = pd.read_excel('Confo6.xlsx')
-
-# help(recon)
-
-trail_count = 3
-x = timeit.timeit(lambda: recon(left_df=df1, right_df=df2,left_exact_match_cols=['TD','SD','B/S','Stock code','Ccy'], right_exact_match_cols=['TD','SD','B/S','Stock code','Ccy'], 
-                                left_compare_cols=['Avg price','Qty','Comm','Total charges','Gross','Net'], right_compare_cols=['Avg price','Qty','Comm','Total charges','Gross','Net']), number=trail_count)
-print(x/trail_count)
-
-# output = recon(left_df=df1, right_df=df2,left_exact_match_cols=['TD','SD','B/S','Stock code','Ccy'], right_exact_match_cols=['TD','SD','B/S','Stock code','Ccy'], 
-#                 left_compare_cols=['Avg price','Qty','Comm','Total charges','Gross','Net'], right_compare_cols=['Avg price','Qty','Comm','Total charges','Gross','Net'], show_matching_score=True)
-
-# print(output)
-# output.to_clipboard()
-
-# output = recon(left_df=df1, 
-# 				right_df=df2, 
-# 				show_left_cols=['Trade date','Client direction','BBG Code','JPM ID'], 
-# 				show_right_cols=['Internal reference'], 
-# 				left_exact_match_cols=['Trade date','Client direction','BBG Code','Currency'], 
-# 				right_exact_match_cols=['TD','B/S','Stock code','Ccy'], 
-# 				left_compare_cols=['Gross Price','Executed quantity','Commission','Market charges','Settlement amount'], 
-# 				right_compare_cols=['Avg price','Qty','Comm','Total charges','Net'], 
-# # 				weight=[0.1,0.5,0.1,0.1,0.2],
-# # 				tolerance_percentage=[1,1,20,20,1],
-# # 				suffix=['_JPM','_OMS'])
-
-# print(output)
-# output.to_clipboard()
