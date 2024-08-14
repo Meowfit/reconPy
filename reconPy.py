@@ -103,7 +103,7 @@ def recon(left_df:pd.DataFrame, right_df:pd.DataFrame,
                          how='outer')
 
     # Calculate matching scores and check tolerance
-    for left_col, right_col, weight, tolerance in zip(left_compare_cols, right_compare_cols, weight, tolerance_percentage):
+    for left_col, right_col, _weight, _tolerance in zip(left_compare_cols, right_compare_cols, weight, tolerance_percentage):
         left_values = merged_df[f"{left_col}{suffix[0]}"]
         right_values = merged_df[f"{right_col}{suffix[1]}"]
 
@@ -111,19 +111,19 @@ def recon(left_df:pd.DataFrame, right_df:pd.DataFrame,
             left_values = pd.to_numeric(left_values) / 60 / 60 / 24 / 1000000000
             right_values = pd.to_numeric(right_values) / 60 / 60 / 24 / 1000000000
             merged_df[f"{left_col}_diff"] = (left_values - right_values) 
-            within_tolerance = (np.abs((left_values - right_values) / 365.25) * 100 <= tolerance) # 1% diff = 3.65 days, measuring the diff in term of number of days in a year. 
+            within_tolerance = (np.abs((left_values - right_values) / 365.25) * 100 <= _tolerance) # 1% diff = 3.65 days, measuring the diff in term of number of days in a year. 
             score = np.where(within_tolerance, ((left_values - right_values) / 365.25) ** 2, np.inf)
         elif pd.api.types.is_object_dtype(left_values):
             merged_df[f"{left_col}_diff"] = np.nan
-            within_tolerance = (merged_df.apply(lambda row: 100 - fuzz.ratio(str(row[f"{left_col}{suffix[0]}"]), str(row[f"{right_col}{suffix[1]}"])), axis=1) <= tolerance)
+            within_tolerance = (merged_df.apply(lambda row: 100 - fuzz.ratio(str(row[f"{left_col}{suffix[0]}"]), str(row[f"{right_col}{suffix[1]}"])), axis=1) <= _tolerance)
             score = np.where(within_tolerance, merged_df.apply(lambda row: 100 - fuzz.ratio(str(row[f"{left_col}{suffix[0]}"]), str(row[f"{right_col}{suffix[1]}"])), axis=1) ** 2, np.inf)
         else:
             merged_df[f"{left_col}_diff"] = (left_values - right_values) 
-            within_tolerance = (np.abs((left_values - right_values) / (right_values + 0.00000001)) * 100 <= tolerance)
+            within_tolerance = (np.abs((left_values - right_values) / (right_values + 0.00000001)) * 100 <= _tolerance)
             score = np.where(within_tolerance, ((left_values - right_values) / (right_values + 0.00000001)) ** 2, np.inf)
     
         # Calculate weighted matching score
-        merged_df[f"{left_col}_score"] = score * weight
+        merged_df[f"{left_col}_score"] = score * _weight
 
     # Calculate total matching score
     score_columns = [f"{col}_score" for col in left_compare_cols]

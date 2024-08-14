@@ -1,18 +1,17 @@
-# Welcome to reconPy!
-
+# Welcome to reconPy
 
 ReconPy is a powerful yet user-friendly data reconciliation engine designed to compare records across two dataframes. Its key features include:
 
- - **Flexibility**: Adaptable to various data structures and comparison needs.    
- - **Score-based Matching**: Utilizes a scoring system to determine the optimal matches between records.
- -  **One-to-One Matching**: Each record is matched only once, ensuring no duplication in the reconciliation process.
- - **Deterministic Resolution**: In cases of multiple optimal matches, it consistently selects the first occurrence.
+- **Flexibility**: Adaptable to various data structures and comparison needs.
+- **Score-based Matching**: Utilizes a scoring system to determine the optimal matches between records.
+- **One-to-One Matching**: Each record is matched only once, ensuring no duplication in the reconciliation process.
+- **Deterministic Resolution**: In cases of multiple optimal matches, it consistently selects the first occurrence.
 
-### Primary Applications:  
+### Primary Applications  
 
 While ReconPy is versatile enough for use across various industries, it's particularly well-suited for financial sector applications, including: **asset management firms**, **banks**, **brokers-dealers** and **hedge funds**.
 
-### Common Use Cases in Finance:
+### Common Use Cases in Finance
 
 - Front Office/Back Office (FOBO) Reconciliation
 - Trade Reconciliation
@@ -42,11 +41,11 @@ Columns from right_df used for exact matching. These columns join left_df and ri
 
 > [!NOTE]
 > The order of left_exact_match_cols and right_exact_match_cols is crucial. They link corresponding columns when header names differ between left_df and right_df:
-> 
+>
 > Correct example:  
 > left_exact_match_cols = ['Trade date', 'Settlement date', 'Stock code']  
 > right_exact_match_cols = ['TD', 'SD', 'Bloomberg code']
-> 
+>
 > Incorrect example:  
 > _'Trade date' incorrectly linked to 'Bloomberg code'_  
 > left_exact_match_cols = ['Trade date', 'Settlement date', 'Stock code']  
@@ -60,7 +59,7 @@ Columns from right_df used to calculate matching scores and determine if record 
 
 > [!NOTE]
 > The order of left_compare_cols and right_compare_cols is crucial. They link corresponding columns when header names differ between left_df and right_df:  
-> 
+>
 > Example:  
 > left_compare_cols = ['Quantity', 'Gross amount', 'Settlement amount']  
 > right_compare_cols = ['Qty', 'Gross', 'Net']
@@ -90,27 +89,26 @@ For date/datetime objects, 1% tolerance equals 3.6525 days. See  _Matching score
 Suffixes appended to left_compare_cols and right_compare_cols. Must be a list of two strings.
 
 **show_matching_status**:  _bool, default =_  `True`  
-If True, displays matching status in *matching_status* in the output dataframe. Possible statuses:
-	* Matched: Perfect match (zero tolerance)
-	* Matched with tolerance: Matched within specified tolerance_percentage
-	* Unmatched: No possible match found
+If True, displays matching status in _matching_status_ in the output dataframe. Possible statuses:
+ *Matched: Perfect match (zero tolerance)
+
+- Matched with tolerance: Matched within specified tolerance_percentage
+- Unmatched: No possible match found
 
 **show_matching_score**:  _bool, default =_  `False`  
-If True, displays matching score of the matched record in *matching_score* in the output dataframe. 
-
+If True, displays matching score of the matched record in _matching_score_ in the output dataframe.
 
 ## Installing reconPy
 
 ```python
->>> pip install reconPy
+>>> py -m pip install reconPy
 ```
 
-
 ## Usage
+
 ```python
 >>> import reconPy
 ```
-
 
 ### Example 1 - trade reconciliation
 
@@ -119,7 +117,6 @@ This example demonstrates the reconciliation of broker's trade confirmation agai
 In this scenario, while both dataframes refer to the same trade records, they differ in headers, values, formatting, and order.
 
 ---
-
 
 df1 - JPM trade confirmation:
 | JPM ID | Trade date | Settlement date | Client direction | BBG Code | ISIN         | CUSIP     | Gross Price | Executed quantity | Currency | Commission | Market charges | Gross amount | Settlement amount | Flow Type |
@@ -145,19 +142,20 @@ df2 - Internal OMS trade report:
 >>> df1 = pd.read_excel('JPM_Trade_Confo_20241010.xlsx')
 >>> df2 = pd.read_excel('OMS_20241010.xlsx')
 >>> output = recon(left_df=df1, 
-			right_df=df2, 
-			show_left_cols=['Trade date','Client direction','BBG Code','JPM ID'], 
-			show_right_cols=['Internal reference'], 
-			left_exact_match_cols=['Trade date','Client direction','BBG Code','Currency'], 
-			right_exact_match_cols=['TD','SD','B/S','Stock code','Ccy'], 
-			left_compare_cols=['Gross Price','Executed quantity','Commission','Market charges','Settlement amount'], 
-			right_compare_cols=['Avg price','Qty','Comm','Total charges','Net'], 
-			weight=[0.1,0.5,0.1,0.1,0.2],
-			tolerance_percentage=[1,1,20,20,1],
-			suffix=['_JPM','_OMS'])
+   right_df=df2, 
+   show_left_cols=['Trade date','Client direction','BBG Code','JPM ID'], 
+   show_right_cols=['Internal reference'], 
+   left_exact_match_cols=['Trade date','Client direction','BBG Code','Currency'], 
+   right_exact_match_cols=['TD','B/S','Stock code','Ccy'], 
+   left_compare_cols=['Gross Price','Executed quantity','Commission','Market charges','Settlement amount'], 
+   right_compare_cols=['Avg price','Qty','Comm','Total charges','Net'], 
+   weight=[0.1,0.5,0.1,0.1,0.2],
+   tolerance_percentage=[1,1,20,20,1],
+   suffix=['_JPM','_OMS'])
 >>> print(output)
 ```
-Output: 
+
+Output:
 | Trade date | Client direction | BBG Code | JPM ID | Internal reference | Gross Price_JPM | Avg price_OMS | Gross Price_diff | Executed quantity_JPM | Qty_OMS  | Executed quantity_diff | Commission_JPM | Comm_OMS | Commission_diff | Market charges_JPM | Total charges_OMS | Market charges_diff | Settlement amount_JPM | Net_OMS      | Settlement amount_diff | matching_status          |
 | ---------- | ---------------- | -------- | ------ | ------------------ | --------------- | ------------- | ---------------- | --------------------- | -------- | ---------------------- | -------------- | -------- | --------------- | ------------------ | ----------------- | ------------------- | --------------------- | ------------ | ---------------------- | ------------------------ |
 | 10/10/2024 | Buy              | MSFT US  | JPM_1  | INTERNAL_4         | 440.370         | 440.370       | 0                | 8,500.00              | 8,500.00 | 0                      | 425.00         | 425.00   | 0.00            | 12.00              | 12.00             | 0.00                | 3,743,582.00          | 3,743,582.00 | 0                      | Matched                  |
@@ -165,7 +163,6 @@ Output:
 | 10/10/2024 | Buy              | MSFT US  | JPM_5  | INTERNAL_5         | 441.000         | 441.000       | 0                | 8,500.00              | 8,500.00 | 0                      | 425.00         | 425.00   | 0.00            | 12.00              | 12.00             | 0.00                | 3,748,937.00          | 3,748,937.00 | 0                      | Matched                  |
 | 10/10/2024 | Short Sell       | TSLA US  | JPM_3  | INTERNAL_1         | 249.230         | 249.230       | 0                | 4,650.00              | 4,650.00 | 0                      |<mark>930.00</mark>         |<mark>950.00</mark>   |<mark>\-20.00</mark>         | 8.00               | 8.00              | 0.00                |<mark>1,157,982.00</mark>          |<mark>1,157,962.00</mark> |<mark>20</mark>                     |<mark>Matched within tolerance</mark> |
 | 10/10/2024 | Sell             | TSLA US  | JPM_2  | INTERNAL_2         | 249.230         | 249.230       | 0                | 5,980.00              | 5,980.00 | 0                      |<mark>299.00</mark>         |<mark>350.00</mark>   |<mark>\-51.00</mark>         | 10.00              | 10.00             | 0.00                |<mark>1,490,086.00</mark>          |<mark>1,490,035.00</mark> |<mark>51</mark>                     |<mark>Matched within tolerance</mark> |
-
 
 The program paired the records and detected small differences in commission, as shown in the  _Commission_diff_  column. Also in the matching_status column, those records are marked as "Matched within tolerance".
 
@@ -207,14 +204,14 @@ df2 - Brokerage_Expenses_2024Q1.xlsx:
 >>> df1 = pd.read_excel('Monthly_Commission_Paid_2024Q1.xlsx')
 >>> df2 = pd.read_excel('Brokerage_Expenses_2024Q1.xlsx')
 >>> output_2 = recon(left_df=df1,
-			right_df=df2,
-			show_left_cols=[],
-			show_right_cols=['Period'],
-			left_exact_match_cols=['Month'],
-			right_exact_match_cols=['Period'],
-			left_compare_cols=['Broker entity name','USD brokerage expenses'],
-			right_compare_cols=['Broker long name','Total commission paid (USD)'],
-			tolerance_percentage=[50,5])
+   right_df=df2,
+   show_left_cols=[],
+   show_right_cols=['Period'],
+   left_exact_match_cols=['Month'],
+   right_exact_match_cols=['Period'],
+   left_compare_cols=['Broker entity name','USD brokerage expenses'],
+   right_compare_cols=['Broker long name','Total commission paid (USD)'],
+   tolerance_percentage=[50,5])
 >>> print(output_2)
 ```
 
@@ -232,7 +229,6 @@ String comparisons is expected to have blank diff columns.
 | 202401 |<mark>JP Morgan Sec</mark>               |<mark>J.P. Morgan Securities plc</mark>  |                         |<mark>54,772</mark>                      |<mark>54,681</mark>                            |<mark>91</mark>                          |<mark>Matched within tolerance</mark> |
 | 202402 |<mark>JP Morgan Sec</mark>              |<mark>J.P. Morgan Securities plc</mark>  |                         |<mark>87,377</mark>                      |<mark>87,153</mark>                            |<mark>224</mark>                         |<mark>Matched within tolerance</mark> |
 
-
 ## Matching Score Calculation
 
 The matching score quantifies the difference or dissimilarity between values in the compared columns. A lower score indicates that the values being compared are more similar or alike. A matching score of 0 would indicate perfect similarity or an exact match.
@@ -241,7 +237,7 @@ $$
 Optimal\ solution = \min(Matching\ score, \forall_{Tolerance} \in  \{1, \ldots, n\} )
 $$
 
-### Numeric Comparison 
+### Numeric Comparison
 
 The matching score is measured using the square of the relative change. To avoid #div/0 error, 0.00000001 is added to the divisor.
 
@@ -253,7 +249,7 @@ $$
 Matching\ score_{n}=(\frac{number_{n}^{left} - number_{n}^{right}}{number_{n}^{right} +  0.00000001})^{2}
 $$
 
-### Date/ Datetime Comparison 
+### Date/ Datetime Comparison
 
 The date score is measured as the difference between two dates relative to the number of days in a year. Considering leap years, the average number of days in a year is 365.25.
 
@@ -267,9 +263,9 @@ $$
 Matching\ score_{n}=(\frac{ date_{n}^{left} - date_{n}^{right}}{365.25})^{2}
 $$
 
-### String Comparison 
+### String Comparison
 
-The string comparison is measured using the ratio function from [fuzzywuzzy library](https://pypi.org/project/fuzzywuzzy/). 
+The string comparison is measured using the ratio function from [fuzzywuzzy library](https://pypi.org/project/fuzzywuzzy/).
 
 $$
 Tolerance_{n} \ge 100 - \mathrm{fuzz.ratio}({ string_{n}^{left}, string_{n}^{right}})
@@ -292,7 +288,7 @@ line [0.0159,0.0931,0.4484,4.4604,9.0372,17.6410,45.4180]
 
 <details>
 <summary>Show numbers in table</summary>
-		  
+
 | Number of records | Run time (seconds) |
 | ----------------------------- | ------------------ |
 | 100                           | 0.0159             |
@@ -307,7 +303,7 @@ line [0.0159,0.0931,0.4484,4.4604,9.0372,17.6410,45.4180]
 
 The dataset size is determined by the number of rows in the left dataframe. The reported execution time is calculated as the mean duration across 5 separate runs. The specific test parameters are as follows:
 
- - Number of columns used for exact matching: 5
- - Number of columns used for comparison: 6 (floats)
- - Weighting: Equal weights
- - Tolerance level: 0% 
+- Number of columns used for exact matching: 5
+- Number of columns used for comparison: 6 (floats)
+- Weighting: Equal weights
+- Tolerance level: 0%
